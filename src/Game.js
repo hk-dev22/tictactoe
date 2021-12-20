@@ -39,14 +39,18 @@ class Board extends React.Component {
   }
 }
 
-function Moves(props){
+function Moves(props) {
   //console.log(props);
-  return props.history.map((move, index) => {
-    console.log(move);
+  const listItems = props.history.map((move, index) => {
     <li key={index}>
-      <button> 'Ah'</button>
+      {move}
     </li>
-  }).join('');
+  }
+  );
+  console.log(listItems);
+  return (
+    <ul>{listItems}</ul>
+  );
 }
 
 class Game extends React.Component {
@@ -79,21 +83,31 @@ class Game extends React.Component {
       player1: !state.player1,
       steps: state.steps + 1
     }));
-    //console.log(this.state.history);
-    // this.setState(
-    // {
-    //   history: this.state.history.concat([{squares}]),
-    //   player1: !this.state.player1,
-    // })
+  }
+
+  jumpTo(move) {
+    this.setState(state => ({
+      history: state.history.slice(-move)
+    }));
   }
 
   render() {
-    //console.log(this.state.history.slice(-1)[0].squares);
-    //console.log(this.state.history.slice(-1)[0]);
     let status = '';
     const winner = calculateWinner(this.state.history.slice(-1)[0].squares);
     if (winner !== null) status = 'Winner: ' + winner;
     else status = `Next player: ${this.state.player1 ? 'X' : 'O'}`;
+
+    const moves = this.state.history.map((step, move) => {
+      const desc = move ?
+        'Go to move #' + move :
+        'Go to game start';
+      return (
+        <li key={move}>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+        </li>
+      );
+    });
+
     return (
       <div className="game">
         <div className="game-board">
@@ -102,9 +116,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>
-            <Moves history={this.state.history}/>
-          </ol>
+          <ol>{moves}</ol>
         </div>
       </div>
     );
