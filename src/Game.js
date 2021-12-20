@@ -2,17 +2,29 @@ import React from 'react';
 import './Game.css';
 
 class Square extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {player1: true};
+    this.handleClick = this.handleClick.bind(this);
+  }
+  
+  handleClick() {
+    this.setState(state => ({
+      player1: !state.player1
+    }));
+  }
+
   render() {
     return (
-      <button className="square">
-        {/* TODO */}
+      <button className="square" onClick={this.handleClick}>
+        {this.state.value ? 'X': 'O'}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
+  renderSquare() {
     return <Square />;
   }
 
