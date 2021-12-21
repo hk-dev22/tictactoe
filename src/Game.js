@@ -39,20 +39,6 @@ class Board extends React.Component {
   }
 }
 
-function Moves(props) {
-  //console.log(props);
-  const listItems = props.history.map((move, index) => {
-    <li key={index}>
-      {move}
-    </li>
-  }
-  );
-  console.log(listItems);
-  return (
-    <ul>{listItems}</ul>
-  );
-}
-
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -70,12 +56,17 @@ class Game extends React.Component {
 
   handleClick(i) {
     const current = this.state.history.slice(-1)[0].squares;
+    console.log('Current:');
+    console.log(current);
     const winner = calculateWinner(current);
     if (winner !== null) return;
     if (current[i] !== null) return;
     current[i] = this.state.player1 ? 'X' : 'O';
+    console.log('History: ');
+    console.log(this.state.history);
+    const squares = current.slice();
     this.setState(state => ({
-      history: state.history.concat([{squares: current}]),
+      history: state.history.concat([{squares: squares}]),
       player1: !state.player1,
       steps: state.history.length
     }));
@@ -86,7 +77,8 @@ class Game extends React.Component {
       steps: move,
       player1: (move % 2) === 0
     }));
-    console.log(this.state.steps);
+    console.log('Number of steps:');
+    console.log(move);
   }
 
   render() {
@@ -107,6 +99,10 @@ class Game extends React.Component {
     });
 
     const current = this.state.history[this.state.steps];
+    // console.log('Current:');
+    // console.log(current);
+    // console.log('History: ');
+    // console.log(this.state.history);
     return (
       <div className="game">
         <div className="game-board">
